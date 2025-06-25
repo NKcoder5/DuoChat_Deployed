@@ -20,7 +20,7 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
+      const endpoint = isLogin ? 'https://duochat-deployed.onrender.com/api/auth/login' : 'https://duochat-deployed.onrender.com/api/auth/register';
       const response = await axios.post(endpoint, formData);
       
       if (response.data.token) {
