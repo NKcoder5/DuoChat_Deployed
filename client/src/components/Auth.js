@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 import './Auth.css';
 
 const Auth = () => {
@@ -20,7 +21,7 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      const endpoint = isLogin ? 'https://duochat-deployed.onrender.com/api/auth/login' : 'https://duochat-deployed.onrender.com/api/auth/register';
+      const endpoint = isLogin ? `${API_BASE_URL}/api/auth/login` : `${API_BASE_URL}/api/auth/register`;
       const response = await axios.post(endpoint, formData);
       
       if (response.data.token) {

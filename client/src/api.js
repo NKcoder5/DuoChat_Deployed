@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { API_BASE_URL } from './config';
 
 // Base URL of the backend
-const API_URL = 'https://duochat-deployed.onrender.com/api';
+const API_URL = `${API_BASE_URL}/api`;
 
 // ✅ User Registration API
 export const registerUser = async (username, email, password) => {

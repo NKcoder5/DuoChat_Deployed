@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import axios from 'axios';
 import LocalAIChat from './components/LocalAIChat';
+import { API_BASE_URL, SOCKET_URL } from './config';
 
 // Configure axios defaults
 axios.defaults.withCredentials = true;
 
 // Configure socket connection
-const SOCKET_URL = process.env.REACT_APP_SOCKET_URL || 'https://duochat-deployed.onrender.com';
 const socket = io(SOCKET_URL, {
   withCredentials: true,
   transports: ['websocket', 'polling']
@@ -93,7 +93,7 @@ function App() {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.get(`https://duochat-deployed.onrender.com/api/messages/${username}`, {
+      const response = await axios.get(`${API_BASE_URL}/api/messages/${username}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMessages(response.data);
@@ -107,7 +107,7 @@ function App() {
   const fetchUserProfile = async (username) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`https://duochat-deployed.onrender.com/api/user/profile`, {
+      const response = await axios.get(`${API_BASE_URL}/api/user/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUserBio(response.data.bio || '');
@@ -120,7 +120,7 @@ function App() {
   const fetchAllUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`https://duochat-deployed.onrender.com/api/users`, {
+      const response = await axios.get(`${API_BASE_URL}/api/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setAllUsers(response.data.filter(user => user.username !== username));
@@ -132,7 +132,7 @@ function App() {
   const fetchGroups = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`https://duochat-deployed.onrender.com/api/groups`, {
+      const response = await axios.get(`${API_BASE_URL}/api/groups`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setGroups(response.data);
@@ -205,7 +205,7 @@ function App() {
       }
       
       // Make sure we're using the correct API endpoint
-      const response = await axios.post('https://duochat-deployed.onrender.com/api/register', { 
+      const response = await axios.post(`${API_BASE_URL}/api/register`, { 
         username, 
         email, 
         password 
@@ -256,7 +256,7 @@ function App() {
       }
       
       // Make sure we're using the correct API endpoint
-      const response = await axios.post('https://duochat-deployed.onrender.com/api/login', { 
+      const response = await axios.post(`${API_BASE_URL}/api/login`, { 
         email, 
         password 
       });
@@ -377,7 +377,7 @@ function App() {
           formData.append('file', selectedFile);
   
           const uploadResponse = await axios.post(
-            'https://duochat-deployed.onrender.com/api/upload',
+            `${API_BASE_URL}/api/upload`,
             formData,
             { headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${token}` } }
           );
@@ -394,7 +394,7 @@ function App() {
         }
   
         const messageResponse = await axios.post(
-          'https://duochat-deployed.onrender.com/api/messages/send-group',
+          `${API_BASE_URL}/api/messages/send-group`,
           messageData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -404,7 +404,7 @@ function App() {
       } else {
         // Check if recipient exists
         const checkResponse = await axios.get(
-          `https://duochat-deployed.onrender.com/api/check-user/${receiverUsername}`,
+          `${API_BASE_URL}/api/check-user/${receiverUsername}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
   
@@ -425,7 +425,7 @@ function App() {
           formData.append('file', selectedFile);
   
           const uploadResponse = await axios.post(
-            'https://duochat-deployed.onrender.com/api/upload',
+            `${API_BASE_URL}/api/upload`,
             formData,
             { headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${token}` } }
           );
@@ -442,7 +442,7 @@ function App() {
         }
   
         const messageResponse = await axios.post(
-          'https://duochat-deployed.onrender.com/api/messages/send',
+          `${API_BASE_URL}/api/messages/send`,
           messageData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -473,7 +473,7 @@ function App() {
   const handleDeleteMessage = async (messageId) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`https://duochat-deployed.onrender.com/api/messages/${messageId}`, {
+      await axios.delete(`${API_BASE_URL}/api/messages/${messageId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       
@@ -496,7 +496,7 @@ function App() {
       if (userBio) formData.append('bio', userBio);
       if (userAvatar && typeof userAvatar !== 'string') formData.append('avatar', userAvatar);
       
-      await axios.put('https://duochat-deployed.onrender.com/api/user/profile', formData, {
+      await axios.put(`${API_BASE_URL}/api/user/profile`, formData, {
         headers: { 
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}` 
@@ -522,7 +522,7 @@ function App() {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.post('https://duochat-deployed.onrender.com/api/groups', {
+      const response = await axios.post(`${API_BASE_URL}/api/groups`, {
         name: newGroupName,
         members: [...selectedGroupMembers, username]
       }, {
@@ -553,7 +553,7 @@ function App() {
       setLoading(true);
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `https://duochat-deployed.onrender.com/api/groups/${currentGroup._id}/add-members`,
+        `${API_BASE_URL}/api/groups/${currentGroup._id}/add-members`,
         { newMembers: selectedNewMembers },
         { headers: { Authorization: `Bearer ${token}` } }
       );
